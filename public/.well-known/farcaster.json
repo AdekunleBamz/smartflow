@@ -1,0 +1,37 @@
+{
+  "appName": "SmartFlow",
+  "appDescription": "Track smart money movements on Base chain with real-time Nansen API data. Follow top traders and capitalize on their opportunities.",
+  "appVersion": "1.0.0",
+  "appIcon": "https://smartflow.com/logo.svg",
+  "splashImageUrl": "https://smartflow.com/splash.png",
+  "splashBackgroundColor": "#0f0f1e",
+  "domain": "smartflow.com",
+  "shortDescription": "Smart money tracking for Base chain traders",
+  "categor": "Finance",
+  "webhookUrl": "https://smartflow.com/api/webhook",
+  "accountAssociation": {
+    "header": "eyJhbGciOiJFRENTQSIsInR5cCI6IkpXVCJ9",
+    "payload": "eyJkb21haW4iOiJzbWFydGZsb3cuY29tIn0",
+    "signature": "MJ_8peakwphq35nK8Hg4bJ0w6xY0ABCD1234EFG5678"
+  },
+  "pages": [
+    {
+      "path": "/",
+      "title": "Home"
+    },
+    {
+      "path": "/dashboard",
+      "title": "Dashboard"
+    },
+    {
+      "path": "/leaderboard",
+      "title": "Leaderboard"
+    },
+    {
+      "path": "/alerts",
+      "title": "Alerts"
+    }
+  ],
+  "network": "eip155:8453",
+  "requiredScopes": ["openid", "wallet"]
+}

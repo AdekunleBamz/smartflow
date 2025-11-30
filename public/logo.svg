@@ -1,0 +1,30 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle with gradient -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:0.1" />
+      <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:0.1" />
+    </linearGradient>
+    <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Outer circle -->
+  <circle cx="100" cy="100" r="95" fill="url(#bgGradient)" stroke="url(#waveGradient)" stroke-width="2" />
+  
+  <!-- Nansen wave (left) -->
+  <path d="M 50 120 Q 55 90 65 100 T 85 100" stroke="url(#waveGradient)" stroke-width="3" fill="none" stroke-linecap="round" />
+  <path d="M 45 135 Q 50 110 60 120 T 80 120" stroke="url(#waveGradient)" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.7" />
+  
+  <!-- Base blocks (right) -->
+  <rect x="115" y="85" width="15" height="15" fill="url(#waveGradient)" rx="2" />
+  <rect x="135" y="85" width="15" height="15" fill="url(#waveGradient)" rx="2" opacity="0.7" />
+  <rect x="115" y="105" width="15" height="15" fill="url(#waveGradient)" rx="2" opacity="0.7" />
+  <rect x="135" y="105" width="15" height="15" fill="url(#waveGradient)" rx="2" />
+  
+  <!-- Center accent -->
+  <circle cx="100" cy="100" r="8" fill="none" stroke="url(#waveGradient)" stroke-width="2" />
+  <circle cx="100" cy="100" r="4" fill="url(#waveGradient)" />
+</svg>
