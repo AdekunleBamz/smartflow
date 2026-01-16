@@ -472,3 +472,38 @@ body {
     padding-right: 2rem;
   }
 }
+
+/* Status indicators */
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status-dot-online {
+  background: var(--color-success);
+  box-shadow: 0 0 8px var(--color-success);
+}
+
+.status-dot-offline {
+  background: #6b7280;
+}
+
+.status-dot-warning {
+  background: var(--color-warning);
+  box-shadow: 0 0 8px var(--color-warning);
+}
+
+/* Number formatting */
+.number-positive {
+  color: var(--color-success);
+}
+
+.number-negative {
+  color: var(--color-error);
+}
+
+.number-neutral {
+  color: #9ca3af;
+}
