@@ -7,3 +7,5 @@ export * from './useClipboard';
 export * from './useInterval';
 export * from './useOnClickOutside';
 export * from './usePrevious';
+export * from './useKeyboardShortcuts';
+export * from './useIntersectionObserver';
