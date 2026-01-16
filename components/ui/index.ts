@@ -18,3 +18,7 @@ export * from './Tabs';
 export * from './Toast';
 export * from './Toggle';
 export * from './Tooltip';
+export * from './AnimatedCounter';
+export * from './GradientText';
+export * from './CopyButton';
+export * from './StatusIndicator';
