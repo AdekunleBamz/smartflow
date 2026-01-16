@@ -1,6 +1,7 @@
 {
   "name": "smartflow",
-  "version": "0.1.0",
+  "version": "2.0.0",
+  "description": "SmartFlow - Real-time smart money intelligence for Base chain",
   "private": true,
   "scripts": {
     "dev": "next dev",
