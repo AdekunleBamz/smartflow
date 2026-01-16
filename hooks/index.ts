@@ -9,3 +9,5 @@ export * from './useOnClickOutside';
 export * from './usePrevious';
 export * from './useKeyboardShortcuts';
 export * from './useIntersectionObserver';
+export * from './useUtilities';
+export * from './useBrowser';
