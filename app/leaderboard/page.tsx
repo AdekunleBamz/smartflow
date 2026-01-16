@@ -1,84 +1,194 @@
+// Leaderboard page - rebuilt with new components
 'use client';
 
-import { useSmartMoneyLeaderboard } from '@/hooks/useSmartMoney';
-import { Header } from '@/components/Header';
+import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Medal } from 'lucide-react';
-import { formatNumber, formatAddress } from '@/lib/utils';
-import Link from 'next/link';
+import { Trophy, Download, RefreshCw } from 'lucide-react';
+import { LeaderboardTable, LeaderboardFiltersBar } from '@/components/leaderboard';
+import { Button } from '@/components/ui/Button';
+import { Card } from '@/components/ui/Card';
+import { Pagination } from '@/components/ui/Pagination';
+import { useLeaderboard, useInvalidateQueries } from '@/lib/queries';
+import { useLeaderboardStore } from '@/lib/leaderboard-store';
 
-export default function Leaderboard() {
-  const { data: leaderboard, isLoading } = useSmartMoneyLeaderboard(100);
+const ITEMS_PER_PAGE = 20;
+
+export default function LeaderboardPage() {
+  const { 
+    filters, 
+    sortField, 
+    sortOrder, 
+    currentPage, 
+    setFilters, 
+    setSorting, 
+    setPage 
+  } = useLeaderboardStore();
+  
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  
+  const { data: wallets, isLoading } = useLeaderboard({
+    limit: 100,
+    sortBy: sortField,
+    order: sortOrder,
+    minTrades: filters.minTrades || undefined,
+    minProfit: filters.minProfit || undefined,
+  });
+  
+  const { invalidateLeaderboard } = useInvalidateQueries();
+
+  // Client-side filtering for search
+  const filteredWallets = useMemo(() => {
+    if (!wallets) return [];
+    
+    let result = [...wallets];
+    
+    if (filters.search) {
+      const search = filters.search.toLowerCase();
+      result = result.filter(w => 
+        w.address.toLowerCase().includes(search) ||
+        w.label?.toLowerCase().includes(search)
+      );
+    }
+    
+    return result;
+  }, [wallets, filters.search]);
+
+  // Pagination
+  const totalPages = Math.ceil(filteredWallets.length / ITEMS_PER_PAGE);
+  const paginatedWallets = filteredWallets.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
+
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    await invalidateLeaderboard();
+    setTimeout(() => setIsRefreshing(false), 1000);
+  };
+
+  const handleExport = () => {
+    if (!filteredWallets.length) return;
+    
+    const csv = [
+      ['Rank', 'Address', 'Label', 'Total Gains', 'Win Rate', 'Trades 30d', 'Realized Profit'],
+      ...filteredWallets.map((w, i) => [
+        i + 1,
+        w.address,
+        w.label || '',
+        w.totalGains,
+        (w.winRate * 100).toFixed(2) + '%',
+        w.trades30d,
+        w.realizedProfit,
+      ])
+    ].map(row => row.join(',')).join('\n');
+    
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `smartflow-leaderboard-${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-[#0f0f1e] via-[#1a1a2e] to-[#0f0f1e]">
-      <Header />
-      <div className="p-4 md:p-8">
-        <div className="max-w-7xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
-            <div>
-              <h1 className="text-4xl md:text-5xl font-bold gradient-text flex items-center gap-3 mb-2">
-                <Medal className="w-10 h-10" />
-                Smart Money Leaderboard
-              </h1>
-              <p className="text-gray-300">Top 100 performing traders by realized profit</p>
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="glass p-6 rounded-lg border border-white/10"
-          >
-            {isLoading ? (
-              <div className="flex justify-center py-12">
-                <div className="animate-spin rounded-full h-12 w-12 border-2 border-cyan-400 border-t-purple-500"></div>
-              </div>
-            ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead className="border-b border-white/10">
-                    <tr className="text-left text-sm text-gray-400">
-                      <th className="pb-4 font-semibold px-4">Rank</th>
-                      <th className="pb-4 font-semibold px-4">Address</th>
-                      <th className="pb-4 font-semibold px-4">Label</th>
-                      <th className="pb-4 font-semibold px-4">Total Gains</th>
-                      <th className="pb-4 font-semibold px-4">Win Rate</th>
-                      <th className="pb-4 font-semibold px-4">30d Trades</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {leaderboard?.map((wallet, idx) => (
-                      <motion.tr
-                        key={wallet.address}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: idx * 0.02 }}
-                        className="border-b border-white/5 hover:bg-white/5 transition-colors"
-                      >
-                        <td className="py-4 px-4">
-                          <span
-                            className={`font-bold ${
-                              idx === 0 ? 'text-yellow-400' : idx === 1 ? 'text-gray-300' : idx === 2 ? 'text-orange-400' : 'text-cyan-400'
-                            }`}
-                          >
-                            #{idx + 1}
-                          </span>
-                        </td>
-                        <td className="py-4 px-4 font-mono text-sm text-gray-300">{formatAddress(wallet.address)}</td>
-                        <td className="py-4 px-4 text-sm">{wallet.label || 'Unknown'}</td>
-                        <td className="py-4 px-4 font-semibold text-green-400">${formatNumber(wallet.totalGains)}</td>
-                        <td className="py-4 px-4 text-yellow-400">{(wallet.winRate * 100).toFixed(1)}%</td>
-                        <td className="py-4 px-4 text-gray-300">{wallet.trades30d}</td>
-                      </motion.tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </motion.div>
+    <div className="container-main py-8 space-y-6">
+      {/* Page Header */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="flex items-start justify-between flex-wrap gap-4"
+      >
+        <div>
+          <div className="flex items-center gap-3 mb-2">
+            <Trophy className="h-8 w-8 text-yellow-400" />
+            <h1 className="text-3xl md:text-4xl font-bold gradient-text">
+              Leaderboard
+            </h1>
+          </div>
+          <p className="text-text-secondary">
+            Top smart money wallets ranked by performance
+          </p>
         </div>
+
+        <div className="flex items-center gap-3">
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={handleExport}
+            disabled={!filteredWallets.length}
+            className="gap-2"
+          >
+            <Download className="h-4 w-4" />
+            Export CSV
+          </Button>
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={handleRefresh}
+            disabled={isRefreshing}
+            className="gap-2"
+          >
+            <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+            Refresh
+          </Button>
+        </div>
+      </motion.div>
+
+      {/* Filters */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+      >
+        <LeaderboardFiltersBar
+          filters={filters}
+          onChange={setFilters}
+        />
+      </motion.div>
+
+      {/* Results count */}
+      <div className="flex items-center justify-between text-sm text-text-tertiary">
+        <span>
+          Showing {paginatedWallets.length} of {filteredWallets.length} wallets
+        </span>
+        {filters.search && (
+          <span>
+            Filtered by: &quot;{filters.search}&quot;
+          </span>
+        )}
       </div>
-    </main>
+
+      {/* Table */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+      >
+        <Card className="overflow-hidden">
+          <LeaderboardTable
+            wallets={paginatedWallets}
+            loading={isLoading}
+            onSort={(field, order) => setSorting(field, order)}
+          />
+        </Card>
+      </motion.div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3 }}
+          className="flex justify-center"
+        >
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setPage}
+          />
+        </motion.div>
+      )}
+    </div>
   );
 }
