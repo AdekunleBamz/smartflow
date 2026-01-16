@@ -1,0 +1,35 @@
+<svg viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="appIconGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#4de3ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="appBgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f0f1e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1a1a2e;stop-opacity:1" />
+    </linearGradient>
+    <filter id="appGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background rounded square -->
+  <rect width="192" height="192" rx="42" fill="url(#appBgGrad)" />
+  
+  <!-- Outer ring -->
+  <circle cx="96" cy="96" r="75" fill="none" stroke="url(#appIconGrad)" stroke-width="2" opacity="0.3" />
+  
+  <!-- Main S flow path -->
+  <path d="M 58 53 C 58 53 76 44 100 48 C 134 53 139 72 110 86 C 82 100 68 110 77 130 C 84 144 110 149 134 139" 
+        stroke="url(#appIconGrad)" stroke-width="7" fill="none" stroke-linecap="round" filter="url(#appGlow)" />
+  
+  <!-- Flow particles -->
+  <circle cx="48" cy="77" r="5" fill="#00d4ff" opacity="0.8" />
+  <circle cx="144" cy="115" r="4" fill="#7c3aed" opacity="0.7" />
+  <circle cx="96" cy="154" r="3.5" fill="#4de3ff" opacity="0.6" />
+</svg>
