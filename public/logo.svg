@@ -1,30 +1,65 @@
 <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-  <!-- Background circle with gradient -->
   <defs>
-    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:0.1" />
-      <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:0.1" />
-    </linearGradient>
-    <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#4de3ff;stop-opacity:1" />
       <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:1" />
     </linearGradient>
+    <linearGradient id="logoBgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f0f1e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1a1a2e;stop-opacity:1" />
+    </linearGradient>
+    <filter id="logoGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feFlood flood-color="#00d4ff" flood-opacity="0.3"/>
+      <feComposite in2="blur" operator="in"/>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
   </defs>
   
-  <!-- Outer circle -->
-  <circle cx="100" cy="100" r="95" fill="url(#bgGradient)" stroke="url(#waveGradient)" stroke-width="2" />
+  <!-- Background circle -->
+  <circle cx="100" cy="100" r="95" fill="url(#logoBgGradient)" />
   
-  <!-- Nansen wave (left) -->
-  <path d="M 50 120 Q 55 90 65 100 T 85 100" stroke="url(#waveGradient)" stroke-width="3" fill="none" stroke-linecap="round" />
-  <path d="M 45 135 Q 50 110 60 120 T 80 120" stroke="url(#waveGradient)" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.7" />
+  <!-- Outer ring -->
+  <circle cx="100" cy="100" r="90" fill="none" stroke="url(#logoGradient)" stroke-width="2" opacity="0.4" />
   
-  <!-- Base blocks (right) -->
-  <rect x="115" y="85" width="15" height="15" fill="url(#waveGradient)" rx="2" />
-  <rect x="135" y="85" width="15" height="15" fill="url(#waveGradient)" rx="2" opacity="0.7" />
-  <rect x="115" y="105" width="15" height="15" fill="url(#waveGradient)" rx="2" opacity="0.7" />
-  <rect x="135" y="105" width="15" height="15" fill="url(#waveGradient)" rx="2" />
+  <!-- Inner decorative ring -->
+  <circle cx="100" cy="100" r="75" fill="none" stroke="url(#logoGradient)" stroke-width="1" opacity="0.2" stroke-dasharray="8 4" />
   
-  <!-- Center accent -->
-  <circle cx="100" cy="100" r="8" fill="none" stroke="url(#waveGradient)" stroke-width="2" />
-  <circle cx="100" cy="100" r="4" fill="url(#waveGradient)" />
+  <!-- Main S flow path -->
+  <path d="M 60 55 C 60 55 80 45 105 50 C 140 55 145 75 115 90 C 85 105 70 115 80 135 C 88 150 115 155 140 145" 
+        stroke="url(#logoGradient)" stroke-width="8" fill="none" stroke-linecap="round" filter="url(#logoGlow)" />
+  
+  <!-- Flow accent lines -->
+  <path d="M 55 70 C 65 68 75 70 85 75" 
+        stroke="url(#logoGradient)" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.5" />
+  <path d="M 125 125 C 135 123 145 125 155 130" 
+        stroke="url(#logoGradient)" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.5" />
+  
+  <!-- Data flow particles -->
+  <circle cx="50" cy="80" r="5" fill="#00d4ff" opacity="0.8" filter="url(#softGlow)">
+    <animate attributeName="opacity" values="0.8;0.3;0.8" dur="2s" repeatCount="indefinite" />
+  </circle>
+  <circle cx="150" cy="115" r="4" fill="#7c3aed" opacity="0.7" filter="url(#softGlow)">
+    <animate attributeName="opacity" values="0.7;0.3;0.7" dur="1.5s" repeatCount="indefinite" />
+  </circle>
+  <circle cx="100" cy="160" r="3.5" fill="#4de3ff" opacity="0.6" filter="url(#softGlow)">
+    <animate attributeName="opacity" values="0.6;0.2;0.6" dur="1.8s" repeatCount="indefinite" />
+  </circle>
+  <circle cx="55" cy="130" r="3" fill="#00d4ff" opacity="0.5">
+    <animate attributeName="opacity" values="0.5;0.2;0.5" dur="2.2s" repeatCount="indefinite" />
+  </circle>
+  <circle cx="145" cy="70" r="3" fill="#7c3aed" opacity="0.5">
+    <animate attributeName="opacity" values="0.5;0.2;0.5" dur="1.7s" repeatCount="indefinite" />
+  </circle>
 </svg>
