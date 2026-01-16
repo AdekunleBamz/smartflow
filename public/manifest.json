@@ -1,0 +1,55 @@
+{
+  "name": "SmartFlow",
+  "short_name": "SmartFlow",
+  "description": "Real-time smart money intelligence on Base chain",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f0f1e",
+  "theme_color": "#00d4ff",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-touch-icon.svg",
+      "sizes": "180x180",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "categories": ["finance", "crypto", "utilities"],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "url": "/dashboard",
+      "description": "View smart money dashboard"
+    },
+    {
+      "name": "Leaderboard",
+      "url": "/leaderboard",
+      "description": "View top traders leaderboard"
+    },
+    {
+      "name": "Alerts",
+      "url": "/alerts",
+      "description": "View opportunity alerts"
+    }
+  ]
+}
