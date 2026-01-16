@@ -1,74 +1,172 @@
+// Alerts page - rebuilt with new components
 'use client';
 
-import React from 'react';
-import { useSmartMoneyDexTrades } from '@/hooks/useSmartMoney';
-import { motion } from 'framer-motion';
-import { AlertCircle } from 'lucide-react';
-import { formatNumber, getTimeAgo } from '@/lib/utils';
-import Link from 'next/link';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Bell, Plus, BellOff } from 'lucide-react';
+import { AlertCard, CreateAlertForm } from '@/components/alerts';
+import { Button } from '@/components/ui/Button';
+import { Card } from '@/components/ui/Card';
+import { EmptyState } from '@/components/ui/EmptyState';
+import { Tabs } from '@/components/ui/Tabs';
+import { useAlertsStore, Alert } from '@/lib/alerts-store';
 
-export default function Alerts() {
-  const { data: trades, isLoading } = useSmartMoneyDexTrades('24h', 50);
+type AlertFilter = 'all' | 'whale' | 'dex' | 'netflow' | 'custom';
 
-  // Filter profitable trades as opportunities
-  const opportunities = trades?.filter((t) => (t.profit || 0) > 0.05) || [];
+export default function AlertsPage() {
+  const [showCreateForm, setShowCreateForm] = useState(false);
+  const [filter, setFilter] = useState<AlertFilter>('all');
+  const [editingAlert, setEditingAlert] = useState<Alert | null>(null);
+  
+  const { 
+    alerts, 
+    addAlert, 
+    updateAlert, 
+    removeAlert, 
+    toggleAlert 
+  } = useAlertsStore();
+
+  const filteredAlerts = filter === 'all' 
+    ? alerts 
+    : alerts.filter(a => a.type === filter);
+
+  const enabledCount = alerts.filter(a => a.enabled).length;
+
+  const handleCreateAlert = (alertData: Omit<Alert, 'id' | 'createdAt' | 'triggerCount'>) => {
+    addAlert(alertData);
+    setShowCreateForm(false);
+  };
+
+  const handleEditAlert = (alert: Alert) => {
+    setEditingAlert(alert);
+    // For now, just toggle - could open edit modal
+  };
+
+  const handleDeleteAlert = (id: string) => {
+    if (confirm('Are you sure you want to delete this alert?')) {
+      removeAlert(id);
+    }
+  };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-[#0f0f1e] via-[#1a1a2e] to-[#0f0f1e] p-4 md:p-8">
-      <div className="max-w-7xl mx-auto">
-        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h1 className="text-4xl md:text-5xl font-bold gradient-text flex items-center gap-3">
-                <AlertCircle className="w-10 h-10" />
-                Smart Money Opportunities
-              </h1>
-              <p className="text-gray-300 mt-2">Recent profitable trades detected</p>
-            </div>
-            <Link href="/dashboard" className="glass px-4 py-2 rounded-lg text-sm hover:bg-white/10 transition-all">
-              ← Dashboard
-            </Link>
+    <div className="container-main py-8 space-y-6">
+      {/* Page Header */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="flex items-start justify-between flex-wrap gap-4"
+      >
+        <div>
+          <div className="flex items-center gap-3 mb-2">
+            <Bell className="h-8 w-8 text-primary" />
+            <h1 className="text-3xl md:text-4xl font-bold gradient-text">
+              Alerts
+            </h1>
           </div>
-        </motion.div>
+          <p className="text-text-secondary">
+            Get notified when smart money makes moves
+          </p>
+        </div>
 
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
-          {isLoading ? (
-            <div className="glass p-8 rounded-lg border border-white/10 flex justify-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-2 border-cyan-400 border-t-purple-500"></div>
-            </div>
-          ) : opportunities.length === 0 ? (
-            <div className="glass p-8 rounded-lg border border-white/10 text-center">
-              <p className="text-gray-300">No significant opportunities found in the last 24 hours</p>
-            </div>
+        <div className="flex items-center gap-3">
+          <span className="text-sm text-text-tertiary">
+            {enabledCount}/{alerts.length} active
+          </span>
+          <Button
+            onClick={() => setShowCreateForm(true)}
+            className="gap-2"
+          >
+            <Plus className="h-4 w-4" />
+            New Alert
+          </Button>
+        </div>
+      </motion.div>
+
+      {/* Create Form */}
+      <AnimatePresence>
+        {showCreateForm && (
+          <CreateAlertForm
+            onSubmit={handleCreateAlert}
+            onCancel={() => setShowCreateForm(false)}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Filter Tabs */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+      >
+        <Tabs
+          tabs={[
+            { id: 'all', label: `All (${alerts.length})` },
+            { id: 'whale', label: '🐋 Whale' },
+            { id: 'dex', label: '📊 DEX' },
+            { id: 'netflow', label: '💸 Netflow' },
+            { id: 'custom', label: '⚙️ Custom' },
+          ]}
+          activeTab={filter}
+          onChange={(id) => setFilter(id as AlertFilter)}
+        />
+      </motion.div>
+
+      {/* Alerts List */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+        className="space-y-4"
+      >
+        <AnimatePresence mode="popLayout">
+          {filteredAlerts.length === 0 ? (
+            <EmptyState
+              icon={BellOff}
+              title={filter === 'all' ? 'No alerts yet' : `No ${filter} alerts`}
+              description={
+                filter === 'all'
+                  ? 'Create your first alert to get notified about smart money activity'
+                  : `You haven't created any ${filter} alerts yet`
+              }
+              action={
+                <Button onClick={() => setShowCreateForm(true)} className="gap-2">
+                  <Plus className="h-4 w-4" />
+                  Create Alert
+                </Button>
+              }
+            />
           ) : (
-            opportunities.slice(0, 20).map((trade, idx) => (
-              <motion.div
-                key={trade.hash}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: idx * 0.05 }}
-                className="glass p-4 rounded-lg border border-green-500/30 bg-green-500/10 hover:bg-green-500/20 transition-all"
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="font-mono text-sm text-cyan-400">{trade.dex}</span>
-                      <span className="text-xs text-gray-400">{getTimeAgo(trade.timestamp)}</span>
-                    </div>
-                    <div className="text-sm text-gray-300">
-                      {trade.amountIn} → {trade.amountOut}
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-lg font-bold text-green-400">+{((trade.profit || 0) * 100).toFixed(1)}%</div>
-                    <div className="text-xs text-gray-400 font-mono">{trade.hash.slice(0, 10)}</div>
-                  </div>
-                </div>
-              </motion.div>
+            filteredAlerts.map((alert) => (
+              <AlertCard
+                key={alert.id}
+                alert={alert}
+                onToggle={toggleAlert}
+                onEdit={handleEditAlert}
+                onDelete={handleDeleteAlert}
+              />
             ))
           )}
+        </AnimatePresence>
+      </motion.div>
+
+      {/* Tips Section */}
+      {alerts.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4 }}
+        >
+          <Card className="p-6 bg-primary/5 border-primary/20">
+            <h3 className="font-semibold text-primary mb-2">💡 Pro Tips</h3>
+            <ul className="text-sm text-text-secondary space-y-1">
+              <li>• Set whale alerts for wallets with high win rates</li>
+              <li>• Monitor netflows to spot accumulation patterns</li>
+              <li>• Combine multiple alert types for comprehensive coverage</li>
+              <li>• Use custom alerts for specific token movements</li>
+            </ul>
+          </Card>
         </motion.div>
-      </div>
-    </main>
+      )}
+    </div>
   );
 }
