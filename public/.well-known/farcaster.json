@@ -1,13 +1,15 @@
 {
   "appName": "SmartFlow",
-  "appDescription": "Track smart money movements on Base chain with real-time Nansen API data. Follow top traders and capitalize on their opportunities.",
-  "appVersion": "1.0.0",
-  "appIcon": "https://smartflow.com/logo.svg",
-  "splashImageUrl": "https://smartflow.com/splash.png",
+  "appDescription": "Track smart money movements on Base chain with real-time data. Follow top traders and capitalize on their opportunities before the crowd catches up.",
+  "appVersion": "2.0.0",
+  "appIcon": "https://smartflow.com/icon-512.svg",
+  "splashImageUrl": "https://smartflow.com/og-image.svg",
   "splashBackgroundColor": "#0f0f1e",
+  "homeUrl": "https://smartflow.com",
   "domain": "smartflow.com",
-  "shortDescription": "Smart money tracking for Base chain traders",
-  "categor": "Finance",
+  "shortDescription": "Smart money intelligence for Base chain",
+  "category": "Finance",
+  "tags": ["defi", "trading", "base", "analytics", "smart-money"],
   "webhookUrl": "https://smartflow.com/api/webhook",
   "accountAssociation": {
     "header": "eyJhbGciOiJFRENTQSIsInR5cCI6IkpXVCJ9",
@@ -17,21 +19,26 @@
   "pages": [
     {
       "path": "/",
-      "title": "Home"
+      "title": "Home",
+      "description": "SmartFlow - Smart Money Intelligence"
     },
     {
       "path": "/dashboard",
-      "title": "Dashboard"
+      "title": "Dashboard",
+      "description": "Real-time smart money dashboard"
     },
     {
       "path": "/leaderboard",
-      "title": "Leaderboard"
+      "title": "Leaderboard",
+      "description": "Top 100 performing traders"
     },
     {
       "path": "/alerts",
-      "title": "Alerts"
+      "title": "Alerts",
+      "description": "Smart money opportunity alerts"
     }
   ],
   "network": "eip155:8453",
-  "requiredScopes": ["openid", "wallet"]
+  "requiredScopes": ["openid", "wallet"],
+  "features": ["wallet-connect", "notifications", "share"]
 }
