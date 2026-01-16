@@ -1,0 +1,35 @@
+<svg viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="appleTouchGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#4de3ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="appleBgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f0f1e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1a1a2e;stop-opacity:1" />
+    </linearGradient>
+    <filter id="appleGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="180" height="180" fill="url(#appleBgGrad)" />
+  
+  <!-- Outer ring -->
+  <circle cx="90" cy="90" r="70" fill="none" stroke="url(#appleTouchGrad)" stroke-width="1.5" opacity="0.3" />
+  
+  <!-- Main S flow path -->
+  <path d="M 54 50 C 54 50 72 41 94 45 C 126 50 131 68 103 81 C 77 94 64 103 72 122 C 79 135 103 140 126 131" 
+        stroke="url(#appleTouchGrad)" stroke-width="6.5" fill="none" stroke-linecap="round" filter="url(#appleGlow)" />
+  
+  <!-- Flow particles -->
+  <circle cx="45" cy="72" r="4.5" fill="#00d4ff" opacity="0.8" />
+  <circle cx="135" cy="108" r="3.5" fill="#7c3aed" opacity="0.7" />
+  <circle cx="90" cy="144" r="3" fill="#4de3ff" opacity="0.6" />
+</svg>
