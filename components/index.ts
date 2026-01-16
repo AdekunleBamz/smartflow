@@ -10,12 +10,12 @@ export { ActivityFeed } from './dashboard/ActivityFeed';
 // Leaderboard components
 export { LeaderboardRow } from './leaderboard/LeaderboardRow';
 export { LeaderboardTable } from './leaderboard/LeaderboardTable';
-export { LeaderboardFilters } from './leaderboard/LeaderboardFilters';
+export { LeaderboardFiltersBar } from './leaderboard/LeaderboardFilters';
 
 // Alert components
 export { AlertCard } from './alerts/AlertCard';
 export { CreateAlertForm } from './alerts/CreateAlertForm';
-export { AlertNotification, AlertNotificationList } from './alerts/AlertNotification';
+export { AlertNotificationToast, AlertNotificationList } from './alerts/AlertNotification';
 
 // Provider components
 export { QueryProvider } from './providers/QueryProvider';

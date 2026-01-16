@@ -62,7 +62,7 @@ export function LeaderboardTable({ wallets, loading = false, onSort }: Leaderboa
       <div className="space-y-2">
         {Array.from({ length: 10 }).map((_, i) => (
           <div key={i} className="flex items-center gap-4 p-4 rounded-lg bg-white/5">
-            <Skeleton variant="rounded" width={32} height={32} />
+            <Skeleton variant="circular" width={32} height={32} />
             <Skeleton width="30%" height={20} />
             <div className="flex-1" />
             <Skeleton width={80} height={20} />
@@ -77,7 +77,7 @@ export function LeaderboardTable({ wallets, loading = false, onSort }: Leaderboa
   if (wallets.length === 0) {
     return (
       <EmptyState
-        icon={Trophy}
+        icon={<Trophy className="h-12 w-12 text-text-tertiary" />}
         title="No wallets found"
         description="Smart money wallets will appear here"
       />

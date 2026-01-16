@@ -10,4 +10,5 @@ export * from './usePrevious';
 export * from './useKeyboardShortcuts';
 export * from './useIntersectionObserver';
 export * from './useUtilities';
-export * from './useBrowser';
+// Note: useBrowser.ts contains duplicates of other hooks, so we export only unique ones
+export { useWindowSize, useBreakpoints, useScrollPosition, useLockBodyScroll, useEscapeKey } from './useBrowser';

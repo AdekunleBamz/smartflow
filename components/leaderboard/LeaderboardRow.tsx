@@ -58,7 +58,7 @@ export function LeaderboardRow({ wallet, rank, index }: LeaderboardRowProps) {
             <Copy className="h-3.5 w-3.5 text-text-tertiary" />
           </button>
           <a
-            href={`${CHAIN_CONFIG.EXPLORER_URL}/address/${wallet.address}`}
+            href={`${CHAIN_CONFIG.BASE.explorerUrl}/address/${wallet.address}`}
             target="_blank"
             rel="noopener noreferrer"
             className="p-1 rounded hover:bg-white/10 transition-colors opacity-0 group-hover:opacity-100"

@@ -29,7 +29,7 @@ export function ActivityFeed({ items, loading = false, maxItems = 10 }: Activity
       <div className="space-y-3">
         {Array.from({ length: 5 }).map((_, i) => (
           <div key={i} className="flex items-center gap-4 p-4 rounded-lg bg-white/5">
-            <Skeleton variant="rounded" width={40} height={40} />
+            <Skeleton variant="rectangular" width={40} height={40} />
             <div className="flex-1 space-y-2">
               <Skeleton width="60%" height={16} />
               <Skeleton width="30%" height={12} />
@@ -47,7 +47,7 @@ export function ActivityFeed({ items, loading = false, maxItems = 10 }: Activity
   if (items.length === 0) {
     return (
       <EmptyState
-        icon={Activity}
+        icon={<Activity className="h-12 w-12 text-text-tertiary" />}
         title="No activity yet"
         description="Smart money flows will appear here when detected"
       />

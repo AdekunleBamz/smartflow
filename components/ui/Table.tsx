@@ -47,8 +47,16 @@ export function Table<T>({
     return [...data].sort((a, b) => {
       const aVal = (a as Record<string, unknown>)[sortKey];
       const bVal = (b as Record<string, unknown>)[sortKey];
-      if (aVal < bVal) return sortDir === 'asc' ? -1 : 1;
-      if (aVal > bVal) return sortDir === 'asc' ? 1 : -1;
+      // Handle type-safe comparison
+      if (aVal === bVal) return 0;
+      if (aVal === null || aVal === undefined) return 1;
+      if (bVal === null || bVal === undefined) return -1;
+      if (typeof aVal === 'string' && typeof bVal === 'string') {
+        return sortDir === 'asc' ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
+      }
+      if (typeof aVal === 'number' && typeof bVal === 'number') {
+        return sortDir === 'asc' ? aVal - bVal : bVal - aVal;
+      }
       return 0;
     });
   }, [data, sortKey, sortDir]);

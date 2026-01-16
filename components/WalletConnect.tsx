@@ -24,6 +24,7 @@ export function WalletConnect() {
   }
 
   const handleCopyAddress = () => {
+    if (!user.address) return;
     navigator.clipboard.writeText(user.address);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);

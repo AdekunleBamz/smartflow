@@ -12,9 +12,12 @@ export class AppError extends Error {
 }
 
 export class ApiError extends AppError {
-  constructor(message: string, statusCode: number = 500) {
+  public responseBody?: string;
+  
+  constructor(message: string, statusCode: number = 500, responseBody?: string) {
     super(message, 'API_ERROR', statusCode);
     this.name = 'ApiError';
+    this.responseBody = responseBody;
   }
 }
 

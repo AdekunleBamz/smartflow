@@ -7,9 +7,12 @@ export const APP_VERSION = '2.0.0';
 // API Configuration
 export const API_CONFIG = {
   NANSEN_BASE_URL: 'https://api.nansen.ai/v1',
+  BASE_URL: 'https://api.nansen.ai/v1',
   CACHE_TTL: 60000, // 1 minute
   REFETCH_INTERVAL: 300000, // 5 minutes
   STALE_TIME: 30000, // 30 seconds
+  RETRY_COUNT: 3,
+  TIMEOUT: 30000, // 30 seconds
 } as const;
 
 // Chain Configuration

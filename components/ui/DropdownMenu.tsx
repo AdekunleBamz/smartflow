@@ -21,13 +21,13 @@ function useDropdown() {
   return context;
 }
 
-// Main Dropdown component
-interface DropdownProps {
+// Main DropdownRoot component
+interface DropdownRootProps {
   children: React.ReactNode;
   className?: string;
 }
 
-export function Dropdown({ children, className }: DropdownProps) {
+export function DropdownRoot({ children, className }: DropdownRootProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggle = useCallback(() => setIsOpen((prev) => !prev), []);

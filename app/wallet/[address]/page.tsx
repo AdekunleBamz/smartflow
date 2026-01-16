@@ -101,7 +101,7 @@ export default function WalletPage() {
               <Copy className="h-4 w-4 text-text-tertiary" />
             </button>
             <a
-              href={`${CHAIN_CONFIG.EXPLORER_URL}/address/${address}`}
+              href={`${CHAIN_CONFIG.BASE.explorerUrl}/address/${address}`}
               target="_blank"
               rel="noopener noreferrer"
               className="p-2 rounded-lg hover:bg-white/10 transition-colors"

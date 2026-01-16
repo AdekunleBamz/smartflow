@@ -9,21 +9,27 @@ interface Tab {
   id: string;
   label: string;
   icon?: React.ReactNode;
-  content: React.ReactNode;
+  content?: React.ReactNode;
 }
 
 interface TabsProps {
   tabs: Tab[];
   defaultTab?: string;
+  activeTab?: string;
   onChange?: (tabId: string) => void;
   className?: string;
 }
 
-export function Tabs({ tabs, defaultTab, onChange, className }: TabsProps) {
-  const [activeTab, setActiveTab] = useState(defaultTab || tabs[0]?.id);
+export function Tabs({ tabs, defaultTab, activeTab: controlledActiveTab, onChange, className }: TabsProps) {
+  const [internalActiveTab, setInternalActiveTab] = useState(defaultTab || tabs[0]?.id);
+  
+  // Support both controlled and uncontrolled modes
+  const activeTab = controlledActiveTab ?? internalActiveTab;
 
   const handleTabChange = (tabId: string) => {
-    setActiveTab(tabId);
+    if (controlledActiveTab === undefined) {
+      setInternalActiveTab(tabId);
+    }
     onChange?.(tabId);
   };
 
@@ -56,7 +62,7 @@ export function Tabs({ tabs, defaultTab, onChange, className }: TabsProps) {
           </button>
         ))}
       </div>
-      <div className="mt-4">{activeContent}</div>
+      {activeContent && <div className="mt-4">{activeContent}</div>}
     </div>
   );
 }

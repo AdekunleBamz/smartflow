@@ -2,18 +2,6 @@
 
 import { useEffect, useState, useCallback } from 'react';
 
-// Debounce hook
-export function useDebounce<T>(value: T, delay: number): T {
-  const [debouncedValue, setDebouncedValue] = useState(value);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setDebouncedValue(value), delay);
-    return () => clearTimeout(timer);
-  }, [value, delay]);
-
-  return debouncedValue;
-}
-
 // Throttle hook
 export function useThrottle<T>(value: T, limit: number): T {
   const [throttledValue, setThrottledValue] = useState(value);
@@ -35,19 +23,6 @@ export function useThrottle<T>(value: T, limit: number): T {
   }, [value, limit, lastRan]);
 
   return throttledValue;
-}
-
-// Previous value hook
-export function usePrevious<T>(value: T): T | undefined {
-  const [previous, setPrevious] = useState<T | undefined>(undefined);
-  const [current, setCurrent] = useState(value);
-
-  if (value !== current) {
-    setPrevious(current);
-    setCurrent(value);
-  }
-
-  return previous;
 }
 
 // Toggle hook

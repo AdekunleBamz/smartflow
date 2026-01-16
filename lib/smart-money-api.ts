@@ -54,14 +54,17 @@ export async function getLeaderboard(params: LeaderboardParams = {}): Promise<Sm
     return data.slice(start, end);
   }
   
-  const response = await api.get<SmartMoneyWallet[]>('/smart-money/leaderboard', {
+  const queryParams: Record<string, string | number | boolean> = {
     limit: params.limit || 50,
     offset: params.offset || 0,
     sort_by: params.sortBy || 'totalGains',
     order: params.order || 'desc',
-    min_trades: params.minTrades,
-    min_profit: params.minProfit,
-  });
+  };
+  
+  if (params.minTrades !== undefined) queryParams.min_trades = params.minTrades;
+  if (params.minProfit !== undefined) queryParams.min_profit = params.minProfit;
+  
+  const response = await api.get<SmartMoneyWallet[]>('/smart-money/leaderboard', queryParams);
   
   return response.data;
 }
@@ -84,13 +87,16 @@ export async function getNetflows(params: NetflowParams = {}): Promise<SmartMone
     return data.slice(0, params.limit || 50);
   }
   
-  const response = await api.get<SmartMoneyFlows[]>('/smart-money/netflows', {
+  const netflowParams: Record<string, string | number | boolean> = {
     limit: params.limit || 50,
     direction: params.direction || 'all',
-    token: params.token,
-    min_value: params.minValue,
     time_range: params.timeRange || '24h',
-  });
+  };
+  
+  if (params.token !== undefined) netflowParams.token = params.token;
+  if (params.minValue !== undefined) netflowParams.min_value = params.minValue;
+  
+  const response = await api.get<SmartMoneyFlows[]>('/smart-money/netflows', netflowParams);
   
   return response.data;
 }
@@ -116,13 +122,16 @@ export async function getDexTrades(params: DexTradeParams = {}): Promise<DexTrad
     return data.slice(0, params.limit || 100);
   }
   
-  const response = await api.get<DexTrade[]>('/smart-money/dex-trades', {
+  const dexParams: Record<string, string | number | boolean> = {
     limit: params.limit || 100,
-    dex: params.dex,
-    token: params.token,
-    wallet: params.wallet,
-    min_profit: params.minProfit,
-  });
+  };
+  
+  if (params.dex !== undefined) dexParams.dex = params.dex;
+  if (params.token !== undefined) dexParams.token = params.token;
+  if (params.wallet !== undefined) dexParams.wallet = params.wallet;
+  if (params.minProfit !== undefined) dexParams.min_profit = params.minProfit;
+  
+  const response = await api.get<DexTrade[]>('/smart-money/dex-trades', dexParams);
   
   return response.data;
 }

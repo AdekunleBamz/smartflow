@@ -73,7 +73,7 @@ export function ActivityFeedItem({ item, index }: ActivityFeedItemProps) {
       </div>
       
       <a
-        href={`${CHAIN_CONFIG.EXPLORER_URL}/tx/${item.txHash}`}
+        href={`${CHAIN_CONFIG.BASE.explorerUrl}/tx/${item.txHash}`}
         target="_blank"
         rel="noopener noreferrer"
         className="p-2 rounded-lg hover:bg-white/10 transition-colors"

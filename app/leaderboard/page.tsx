@@ -4,10 +4,11 @@
 import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Trophy, Download, RefreshCw } from 'lucide-react';
-import { LeaderboardTable, LeaderboardFiltersBar } from '@/components/leaderboard';
+import { LeaderboardTable } from '@/components/leaderboard';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Pagination } from '@/components/ui/Pagination';
+import { SearchInput } from '@/components/ui/SearchInput';
 import { useLeaderboard, useInvalidateQueries } from '@/lib/queries';
 import { useLeaderboardStore } from '@/lib/leaderboard-store';
 
@@ -15,12 +16,13 @@ const ITEMS_PER_PAGE = 20;
 
 export default function LeaderboardPage() {
   const { 
-    filters, 
+    searchQuery,
     sortField, 
     sortOrder, 
-    currentPage, 
-    setFilters, 
-    setSorting, 
+    page,
+    minTrades,
+    setSearchQuery,
+    toggleSort,
     setPage 
   } = useLeaderboardStore();
   
@@ -30,8 +32,7 @@ export default function LeaderboardPage() {
     limit: 100,
     sortBy: sortField,
     order: sortOrder,
-    minTrades: filters.minTrades || undefined,
-    minProfit: filters.minProfit || undefined,
+    minTrades: minTrades || undefined,
   });
   
   const { invalidateLeaderboard } = useInvalidateQueries();
@@ -42,8 +43,8 @@ export default function LeaderboardPage() {
     
     let result = [...wallets];
     
-    if (filters.search) {
-      const search = filters.search.toLowerCase();
+    if (searchQuery) {
+      const search = searchQuery.toLowerCase();
       result = result.filter(w => 
         w.address.toLowerCase().includes(search) ||
         w.label?.toLowerCase().includes(search)
@@ -51,13 +52,13 @@ export default function LeaderboardPage() {
     }
     
     return result;
-  }, [wallets, filters.search]);
+  }, [wallets, searchQuery]);
 
   // Pagination
   const totalPages = Math.ceil(filteredWallets.length / ITEMS_PER_PAGE);
   const paginatedWallets = filteredWallets.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
+    (page - 1) * ITEMS_PER_PAGE,
+    page * ITEMS_PER_PAGE
   );
 
   const handleRefresh = async () => {
@@ -135,15 +136,17 @@ export default function LeaderboardPage() {
         </div>
       </motion.div>
 
-      {/* Filters */}
+      {/* Search */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
       >
-        <LeaderboardFiltersBar
-          filters={filters}
-          onChange={setFilters}
+        <SearchInput
+          value={searchQuery}
+          onChange={setSearchQuery}
+          placeholder="Search by address or label..."
+          className="max-w-md"
         />
       </motion.div>
 
@@ -152,9 +155,9 @@ export default function LeaderboardPage() {
         <span>
           Showing {paginatedWallets.length} of {filteredWallets.length} wallets
         </span>
-        {filters.search && (
+        {searchQuery && (
           <span>
-            Filtered by: &quot;{filters.search}&quot;
+            Filtered by: &quot;{searchQuery}&quot;
           </span>
         )}
       </div>
@@ -169,7 +172,7 @@ export default function LeaderboardPage() {
           <LeaderboardTable
             wallets={paginatedWallets}
             loading={isLoading}
-            onSort={(field, order) => setSorting(field, order)}
+            onSort={(field) => toggleSort(field)}
           />
         </Card>
       </motion.div>
@@ -183,7 +186,7 @@ export default function LeaderboardPage() {
           className="flex justify-center"
         >
           <Pagination
-            currentPage={currentPage}
+            currentPage={page}
             totalPages={totalPages}
             onPageChange={setPage}
           />

@@ -121,7 +121,6 @@ export default function DashboardPage() {
                 ]}
                 activeTab={timeRange}
                 onChange={(id) => setTimeRange(id as typeof timeRange)}
-                size="sm"
               />
             </div>
             <ActivityFeed
@@ -181,12 +180,12 @@ export default function DashboardPage() {
             <h3 className="font-semibold mb-4">Quick Actions</h3>
             <div className="space-y-2">
               <Link href="/leaderboard" className="block">
-                <Button variant="secondary" fullWidth className="justify-start gap-2">
+                <Button variant="secondary" className="w-full justify-start gap-2">
                   🏆 View Leaderboard
                 </Button>
               </Link>
               <Link href="/alerts" className="block">
-                <Button variant="secondary" fullWidth className="justify-start gap-2">
+                <Button variant="secondary" className="w-full justify-start gap-2">
                   🔔 Manage Alerts
                 </Button>
               </Link>

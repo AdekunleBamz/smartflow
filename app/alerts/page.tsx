@@ -121,7 +121,7 @@ export default function AlertsPage() {
         <AnimatePresence mode="popLayout">
           {filteredAlerts.length === 0 ? (
             <EmptyState
-              icon={BellOff}
+              icon={<BellOff className="w-16 h-16" />}
               title={filter === 'all' ? 'No alerts yet' : `No ${filter} alerts`}
               description={
                 filter === 'all'
