@@ -1,110 +1,199 @@
+// Dashboard page - rebuilt with new components
 'use client';
 
-import { useSmartMoneyLeaderboard, useSmartMoneyNetflows } from '@/hooks/useSmartMoney';
-import { StatCard } from '@/components/StatCard';
-import { Header } from '@/components/Header';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { TrendingUp, Zap, Activity } from 'lucide-react';
-import { formatNumber } from '@/lib/utils';
+import { RefreshCw, TrendingUp, Activity, Clock } from 'lucide-react';
+import { DashboardStatsGrid, ActivityFeed } from '@/components/dashboard';
+import { Button } from '@/components/ui/Button';
+import { Card } from '@/components/ui/Card';
+import { Tabs } from '@/components/ui/Tabs';
+import { useLeaderboard, useNetflows, useInvalidateQueries } from '@/lib/queries';
+import { formatRelativeTime } from '@/lib/formatters';
 import Link from 'next/link';
 
-export default function Dashboard() {
-  const { data: leaderboard, isLoading: leaderboardLoading } = useSmartMoneyLeaderboard(10);
-  const { data: netflows, isLoading: netflowsLoading } = useSmartMoneyNetflows('24h');
+export default function DashboardPage() {
+  const [timeRange, setTimeRange] = useState<'1h' | '24h' | '7d'>('24h');
+  const { data: leaderboard, isLoading: leaderboardLoading, dataUpdatedAt } = useLeaderboard({ limit: 10 });
+  const { data: netflows, isLoading: netflowsLoading } = useNetflows({ timeRange, limit: 20 });
+  const { invalidateAll } = useInvalidateQueries();
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const totalValue = leaderboard?.reduce((sum, w) => sum + (w.totalGains || 0), 0) || 0;
-  const avgWinRate = leaderboard ? leaderboard.reduce((sum, w) => sum + w.winRate, 0) / leaderboard.length : 0;
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    await invalidateAll();
+    setTimeout(() => setIsRefreshing(false), 1000);
+  };
+
+  // Calculate stats from leaderboard data
+  const stats = {
+    totalVolume: leaderboard?.reduce((sum, w) => sum + (w.totalGains || 0), 0) || 0,
+    totalWallets: leaderboard?.length || 0,
+    activeFlows: netflows?.length || 0,
+    avgWinRate: leaderboard?.length
+      ? leaderboard.reduce((sum, w) => sum + w.winRate, 0) / leaderboard.length
+      : 0,
+    totalTrades: leaderboard?.reduce((sum, w) => sum + w.trades30d, 0) || 0,
+    profitableWallets: leaderboard?.filter(w => w.totalGains > 0).length || 0,
+  };
+
+  // Transform netflows to activity items
+  const activityItems = (netflows || []).map((flow, i) => ({
+    id: flow.txHash || `flow-${i}`,
+    type: flow.direction === 'in' ? 'inflow' as const : 'outflow' as const,
+    wallet: flow.wallet,
+    token: flow.tokenSymbol || flow.token,
+    amount: flow.amount,
+    value: flow.value || flow.amount,
+    txHash: flow.txHash || '',
+    timestamp: flow.timestamp,
+  }));
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-[#0f0f1e] via-[#1a1a2e] to-[#0f0f1e]">
-      <Header />
-      <div className="p-4 md:p-8">
-        <div className="max-w-7xl mx-auto">
-          {/* Header */}
-          <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
-            <h1 className="text-4xl md:text-5xl font-bold gradient-text mb-2">Dashboard</h1>
-            <p className="text-gray-300 mb-8">Real-time smart money intelligence</p>
+    <div className="container-main py-8 space-y-8">
+      {/* Page Header */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="flex items-start justify-between flex-wrap gap-4"
+      >
+        <div>
+          <h1 className="text-3xl md:text-4xl font-bold gradient-text mb-2">
+            Dashboard
+          </h1>
+          <p className="text-text-secondary">
+            Real-time smart money intelligence on Base
+          </p>
+        </div>
 
-            {/* Stats Grid */}
-            <div className="grid md:grid-cols-3 gap-4">
-              <StatCard
-                label="Total Smart Money Value"
-                value={`$${formatNumber(totalValue)}`}
-                icon={<TrendingUp className="w-5 h-5" />}
-                change={0.15}
-              />
-              <StatCard
-                label="Average Win Rate"
-                value={`${(avgWinRate * 100).toFixed(1)}%`}
-                icon={<Zap className="w-5 h-5" />}
-                change={0.08}
-              />
-              <StatCard
-                label="24h Netflows"
-                value={`${netflows?.length || 0} Flows`}
-                icon={<Activity className="w-5 h-5" />}
-                change={0.22}
+        <div className="flex items-center gap-3">
+          {dataUpdatedAt && (
+            <span className="text-xs text-text-tertiary flex items-center gap-1">
+              <Clock className="h-3 w-3" />
+              Updated {formatRelativeTime(dataUpdatedAt)}
+            </span>
+          )}
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={handleRefresh}
+            disabled={isRefreshing}
+            className="gap-2"
+          >
+            <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+            Refresh
+          </Button>
+        </div>
+      </motion.div>
+
+      {/* Stats Grid */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+      >
+        <DashboardStatsGrid
+          data={stats}
+          loading={leaderboardLoading}
+        />
+      </motion.div>
+
+      {/* Main Content Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Activity Feed */}
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.2 }}
+          className="lg:col-span-2"
+        >
+          <Card className="p-6">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <Activity className="h-5 w-5 text-primary" />
+                <h2 className="text-xl font-semibold">Recent Activity</h2>
+              </div>
+              <Tabs
+                tabs={[
+                  { id: '1h', label: '1H' },
+                  { id: '24h', label: '24H' },
+                  { id: '7d', label: '7D' },
+                ]}
+                activeTab={timeRange}
+                onChange={(id) => setTimeRange(id as typeof timeRange)}
+                size="sm"
               />
             </div>
-          </motion.div>
+            <ActivityFeed
+              items={activityItems}
+              loading={netflowsLoading}
+              maxItems={10}
+            />
+          </Card>
+        </motion.div>
 
-          {/* Leaderboard Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="glass p-6 rounded-lg border border-white/10"
-          >
-            <h2 className="text-2xl font-bold mb-6">Top Smart Money Traders</h2>
+        {/* Quick Stats Sidebar */}
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.3 }}
+          className="space-y-6"
+        >
+          <Card className="p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <TrendingUp className="h-5 w-5 text-profit" />
+              <h3 className="font-semibold">Top Performers</h3>
+            </div>
+            <div className="space-y-3">
+              {leaderboardLoading ? (
+                Array.from({ length: 5 }).map((_, i) => (
+                  <div key={i} className="flex items-center gap-3 animate-pulse">
+                    <div className="w-6 h-6 rounded bg-white/10" />
+                    <div className="flex-1 h-4 rounded bg-white/10" />
+                    <div className="w-16 h-4 rounded bg-white/10" />
+                  </div>
+                ))
+              ) : (
+                leaderboard?.slice(0, 5).map((wallet, i) => (
+                  <div key={wallet.address} className="flex items-center gap-3">
+                    <span className="text-xs font-medium text-text-tertiary w-6">
+                      #{i + 1}
+                    </span>
+                    <span className="flex-1 text-sm font-mono truncate">
+                      {wallet.address.slice(0, 8)}...
+                    </span>
+                    <span className="text-sm font-medium text-profit">
+                      +${(wallet.totalGains / 1000).toFixed(1)}K
+                    </span>
+                  </div>
+                ))
+              )}
+            </div>
+            <Link
+              href="/leaderboard"
+              className="block mt-4 text-center text-sm text-primary hover:text-primary-light transition-colors"
+            >
+              View Full Leaderboard →
+            </Link>
+          </Card>
 
-            {leaderboardLoading ? (
-              <div className="flex justify-center py-8">
-                <div className="animate-spin rounded-full h-12 w-12 border-2 border-cyan-400 border-t-purple-500"></div>
-              </div>
-            ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead className="border-b border-white/10">
-                    <tr className="text-left text-sm text-gray-400">
-                      <th className="pb-4 font-semibold">Rank</th>
-                      <th className="pb-4 font-semibold">Address</th>
-                      <th className="pb-4 font-semibold">Total Gains</th>
-                      <th className="pb-4 font-semibold">Win Rate</th>
-                      <th className="pb-4 font-semibold">30d Trades</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {leaderboard?.slice(0, 10).map((wallet, idx) => (
-                      <motion.tr
-                        key={wallet.address}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: idx * 0.05 }}
-                        className="border-b border-white/5 hover:bg-white/5 transition-colors"
-                      >
-                        <td className="py-4 text-cyan-400 font-bold">#{idx + 1}</td>
-                        <td className="py-4 font-mono text-sm text-gray-300">{wallet.address.slice(0, 10)}...</td>
-                        <td className="py-4 font-semibold text-green-400">${formatNumber(wallet.totalGains)}</td>
-                        <td className="py-4 text-yellow-400">{(wallet.winRate * 100).toFixed(1)}%</td>
-                        <td className="py-4 text-gray-300">{wallet.trades30d}</td>
-                      </motion.tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-
-            <div className="mt-6">
-              <Link
-                href="/leaderboard"
-                className="inline-block glass px-6 py-2 rounded-lg hover:bg-white/10 transition-all"
-              >
-                View Full Leaderboard →
+          <Card className="p-6">
+            <h3 className="font-semibold mb-4">Quick Actions</h3>
+            <div className="space-y-2">
+              <Link href="/leaderboard" className="block">
+                <Button variant="secondary" fullWidth className="justify-start gap-2">
+                  🏆 View Leaderboard
+                </Button>
+              </Link>
+              <Link href="/alerts" className="block">
+                <Button variant="secondary" fullWidth className="justify-start gap-2">
+                  🔔 Manage Alerts
+                </Button>
               </Link>
             </div>
-          </motion.div>
-        </div>
+          </Card>
+        </motion.div>
       </div>
-    </main>
+    </div>
   );
 }
