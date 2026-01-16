@@ -230,7 +230,15 @@ npm run build
 
 ## License
 
-MIT - Feel free to modify and deploy!
+MIT - See [LICENSE](./LICENSE) for details.
+
+## Security
+
+See [SECURITY.md](./SECURITY.md) for reporting vulnerabilities.
+
+## Contributing
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
 
 ## Support
 
@@ -239,4 +247,4 @@ For Farcaster integration help, see [Farcaster Mini Apps Guide](https://docs.far
 
 ---
 
-Built with ❤️ for the Farcaster community.
+Built with ❤️ for the Farcaster community on Base chain.
