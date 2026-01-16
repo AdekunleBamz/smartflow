@@ -2,6 +2,39 @@
 @tailwind components;
 @tailwind utilities;
 
+/* CSS Custom Properties */
+:root {
+  /* Colors */
+  --color-dark: #0f0f1e;
+  --color-dark-light: #1a1a2e;
+  --color-accent: #00d4ff;
+  --color-accent-dark: #7c3aed;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-dark) 100%);
+  --gradient-dark: linear-gradient(135deg, var(--color-dark) 0%, var(--color-dark-light) 100%);
+
+  /* Glass effect */
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-blur: 10px;
+
+  /* Typography */
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  /* Spacing */
+  --header-height: 64px;
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+  --transition-slow: 350ms ease;
+}
+
 * {
   margin: 0;
   padding: 0;
