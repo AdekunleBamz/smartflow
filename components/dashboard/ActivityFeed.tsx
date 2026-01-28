@@ -57,7 +57,7 @@ export function ActivityFeed({ items, loading = false, maxItems = 10 }: Activity
   const displayItems = items.slice(0, maxItems);
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-2 divide-y divide-white/5">
       {displayItems.map((item, index) => (
         <ActivityFeedItem
           key={item.id}
