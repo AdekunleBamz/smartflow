@@ -106,7 +106,7 @@ export function Select({
             className={cn(
               'absolute z-50 w-full mt-2 py-2',
               'bg-gray-900 border border-white/10 rounded-xl',
-              'shadow-xl shadow-black/20 max-h-60 overflow-auto'
+              'shadow-xl shadow-black/20 max-h-60 overflow-auto custom-scrollbar'
             )}
           >
             {options.map((option) => (
