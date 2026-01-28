@@ -11,7 +11,7 @@ A sophisticated Farcaster mini app for real-time smart money intelligence on Bas
 💎 **Modern UI** - Beautiful glassmorphism design with smooth animations
 
 ## Tech Stack
-
+## Recent Updatesnn- Upgraded Next.js to 14.1.0 for improved performancen- Updated framer-motion to 11.0.0 with latest animationsn- Enhanced UI with hover effects and glow animationsn- Added tooltips for better user experience
 - **Framework**: Next.js 14+ (App Router)
 - **Language**: TypeScript (strict mode)
 - **Styling**: Tailwind CSS 3.4 with custom glassmorphism theme
