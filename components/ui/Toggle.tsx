@@ -53,7 +53,7 @@ export function Toggle({
         <motion.div
           initial={false}
           animate={{ x: checked ? config.translate : 2 }}
-          transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+          transition={{ type: 'spring', stiffness: 600, damping: 25 }}
           className={cn(
             'absolute top-1/2 -translate-y-1/2 rounded-full bg-white shadow-md',
             config.thumb
