@@ -58,7 +58,7 @@ export default function AlertsPage() {
       >
         <div>
           <div className="flex items-center gap-3 mb-2">
-            <Bell className="h-8 w-8 text-primary" />
+            <Bell className="h-8 w-8 text-primary animate-pulse" />
             <h1 className="text-3xl md:text-4xl font-bold gradient-text">
               Alerts
             </h1>
