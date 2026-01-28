@@ -226,7 +226,7 @@ export default function HomePage() {
             <div className="flex items-center gap-2">
               <img src="/logo.svg" alt="SmartFlow" className="w-6 h-6" />
               <span className="font-semibold">SmartFlow</span>
-              <span className="text-text-tertiary text-sm">© 2024</span>
+              <span className="text-text-tertiary text-sm">© 2024-2026</span>
             </div>
             <div className="flex items-center gap-6">
               <a 
