@@ -15,7 +15,7 @@ export function WalletConnect() {
       <motion.button
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        className="glass px-4 py-2 rounded-lg font-medium flex items-center gap-2 border border-cyan-400/30 hover:border-cyan-400/60 transition-all"
+        className="glass px-4 py-2 rounded-lg font-medium flex items-center gap-2 border border-cyan-400/30 hover:border-cyan-400/60 hover:shadow-glow-sm transition-all duration-300"
       >
         <Wallet className="w-4 h-4" />
         Connect Wallet
