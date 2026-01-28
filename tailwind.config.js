@@ -49,7 +49,7 @@ module.exports = {
         'fade-up': 'fadeUp 0.4s ease-out',
         'slide-in': 'slideIn 0.3s ease-out',
         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-        'glow': 'glow 2s ease-in-out infinite alternate',
+        'bounce-slow': 'bounce 2s infinite',        'glow': 'glow 2s ease-in-out infinite alternate',
       },
       keyframes: {
         fadeIn: {
