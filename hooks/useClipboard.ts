@@ -9,7 +9,7 @@ interface UseClipboardResult {
   error: Error | null;
 }
 
-export function useClipboard(timeout: number = 2000): UseClipboardResult {
+export function useClipboard(timeout: number = 1500): UseClipboardResult {
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
