@@ -31,7 +31,7 @@ export function LeaderboardRow({ wallet, rank, index }: LeaderboardRowProps) {
     <motion.tr
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.02 }}
+      transition={{ delay: index * 0.03, type: 'spring', stiffness: 100 }}
       className="group hover:bg-white/5 transition-colors"
     >
       {/* Rank */}
