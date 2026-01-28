@@ -42,7 +42,7 @@ export function Header() {
         {/* Logo */}
         <Link 
           href="/" 
-          className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+          className="flex items-center gap-2 hover:opacity-80 hover:scale-105 transition-all duration-200"
         >
           <img src="/logo.svg" alt="SmartFlow" className="w-8 h-8" />
           <span className="text-xl font-bold gradient-text hidden sm:inline">
