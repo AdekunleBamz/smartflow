@@ -33,7 +33,7 @@
     "tailwind-merge": "^2.2.0",
     "viem": "^2.13.0",
     "wagmi": "^2.10.0",
-    "zustand": "^4.4.1"
+    "zustand": "^4.5.0"
   },
   "devDependencies": {
     "@types/node": "^20.10.6",
