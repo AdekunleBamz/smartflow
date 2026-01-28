@@ -78,7 +78,7 @@ export default function DashboardPage() {
             size="sm"
             onClick={handleRefresh}
             disabled={isRefreshing}
-            className="gap-2"
+            className="gap-2" title="Refresh dashboard data"
           >
             <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
             Refresh
