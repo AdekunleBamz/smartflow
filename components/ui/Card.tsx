@@ -28,7 +28,7 @@ export function Card({
   const Component = hoverable ? motion.div : 'div';
   const motionProps = hoverable
     ? {
-        whileHover: { scale: 1.02, y: -2 },
+        whileHover: { scale: 1.02, y: -3 },
         transition: { duration: 0.2 },
       }
     : {};
