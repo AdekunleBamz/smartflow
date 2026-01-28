@@ -43,3 +43,13 @@ export function usePrefersDarkMode(): boolean {
 export function usePrefersReducedMotion(): boolean {
   return useMediaQuery('(prefers-reduced-motion: reduce)');
 }
+
+// Large desktop hook
+export function useIsLargeDesktop(): boolean {
+  return useMediaQuery('(min-width: 1536px)');
+}
+
+// Touch device detection
+export function useIsTouchDevice(): boolean {
+  return useMediaQuery('(hover: none) and (pointer: coarse)');
+}
