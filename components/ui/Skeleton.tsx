@@ -18,7 +18,7 @@ export function Skeleton({
   height,
   animation = 'pulse',
 }: SkeletonProps) {
-  const baseStyles = 'bg-white/5';
+  const baseStyles = 'bg-white/5 backdrop-blur-sm';
 
   const variantStyles = {
     text: 'rounded',
