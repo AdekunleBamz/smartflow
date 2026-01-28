@@ -114,3 +114,34 @@ export async function getSmartMoneyDexTrades(
 export function clearCache(): void {
   cache.clear();
 }
+
+// Custom error class for API errors
+export class NansenAPIError extends Error {
+  constructor(
+    message: string,
+    public statusCode?: number,
+    public endpoint?: string
+  ) {
+    super(message);
+    this.name = 'NansenAPIError';
+  }
+}
+
+// Retry configuration
+const MAX_RETRIES = 3;
+const RETRY_DELAY = 1000;
+
+async function withRetry<T>(
+  fn: () => Promise<T>,
+  retries: number = MAX_RETRIES
+): Promise<T> {
+  try {
+    return await fn();
+  } catch (error) {
+    if (retries > 0) {
+      await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
+      return withRetry(fn, retries - 1);
+    }
+    throw error;
+  }
+}
