@@ -27,7 +27,7 @@ export function EmptyState({
       )}
     >
       <div className="mb-4 text-gray-500">
-        {icon || <Inbox className="w-16 h-16" />}
+        {icon || <Inbox className="w-16 h-16 opacity-60" />}
       </div>
       <h3 className="text-lg font-semibold text-white mb-2">{title}</h3>
       {description && (
