@@ -2,7 +2,7 @@
 
 export const APP_NAME = 'SmartFlow';
 export const APP_DESCRIPTION = 'Real-time smart money intelligence on Base chain';
-export const APP_VERSION = '2.0.0';
+export const APP_VERSION = '2.1.0';
 
 // API Configuration
 export const API_CONFIG = {
