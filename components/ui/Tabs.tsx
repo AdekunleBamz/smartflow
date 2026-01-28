@@ -52,7 +52,7 @@ export function Tabs({ tabs, defaultTab, activeTab: controlledActiveTab, onChang
               <motion.div
                 layoutId="activeTab"
                 className="absolute inset-0 bg-white/10 rounded-md"
-                transition={{ type: 'spring', duration: 0.3 }}
+                transition={{ type: 'spring', duration: 0.25, bounce: 0.2 }}
               />
             )}
             <span className="relative z-10 flex items-center gap-2">
