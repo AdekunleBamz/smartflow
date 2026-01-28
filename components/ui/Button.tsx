@@ -41,7 +41,7 @@ export function Button({
 
   return (
     <motion.button
-      whileHover={{ scale: disabled ? 1 : 1.02 }}
+      whileHover={{ scale: disabled ? 1 : 1.03, y: disabled ? 0 : -1 }}
       whileTap={{ scale: disabled ? 1 : 0.98 }}
       className={cn(baseStyles, variants[variant], sizes[size], className)}
       disabled={disabled || isLoading}
