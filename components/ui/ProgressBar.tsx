@@ -65,7 +65,7 @@ export function ProgressBar({
         <motion.div
           initial={animated ? { width: 0 } : false}
           animate={{ width: `${percentage}%` }}
-          transition={{ duration: 0.5, ease: 'easeOut' }}
+          transition={{ duration: 0.4, ease: 'easeOut' }}
           className={cn(
             'h-full rounded-full',
             variantStyles[variant]
@@ -130,7 +130,7 @@ export function CircularProgress({
           className={circularVariantStyles[variant]}
           initial={{ strokeDashoffset: circumference }}
           animate={{ strokeDashoffset }}
-          transition={{ duration: 0.5, ease: 'easeOut' }}
+          transition={{ duration: 0.4, ease: 'easeOut' }}
           style={{ strokeDasharray: circumference }}
         />
       </svg>
