@@ -43,7 +43,7 @@ export function Input({
           id={inputId}
           className={cn(
             'w-full px-4 py-2.5 bg-white/5 border rounded-lg text-white placeholder-gray-500',
-            'transition-all duration-200',
+            'transition-all duration-150',
             'focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent',
             error
               ? 'border-red-500 focus:ring-red-500/50 focus:border-red-500'
