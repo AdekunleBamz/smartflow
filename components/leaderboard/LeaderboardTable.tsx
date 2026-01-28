@@ -85,7 +85,7 @@ export function LeaderboardTable({ wallets, loading = false, onSort }: Leaderboa
   }
 
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto custom-scrollbar">
       <table className="w-full">
         <thead className="border-b border-white/10">
           <tr>
