@@ -103,3 +103,20 @@ export function formatPnL(value: number): { text: string; className: string } {
   }
   return { text: formatted, className: 'text-neutral' };
 }
+
+
+// Format compact number with locale awareness
+export function formatCompactNumber(value: number): string {
+  return new Intl.NumberFormat("en-US", {
+    notation: "compact",
+    compactDisplay: "short",
+  }).format(value);
+}
+
+// Format time duration in seconds to human readable
+export function formatDuration(seconds: number): string {
+  if (seconds < 60) return `${seconds}s`;
+  if (seconds < 3600) return `${Math.floor(seconds / 60)}m`;
+  if (seconds < 86400) return `${Math.floor(seconds / 3600)}h`;
+  return `${Math.floor(seconds / 86400)}d`;
+}
